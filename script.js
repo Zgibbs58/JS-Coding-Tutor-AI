@@ -12,6 +12,14 @@ const model = new OpenAI({
   model: "gpt-3.5-turbo",
 });
 
+// With a `StructuredOutputParser` we can define a schema for the output.
+const parser = StructuredOutputParser.fromNamesAndDescriptions({
+  code: "Javascript code that answers the user's question",
+  explanation: "detailed explanation of the example code provided",
+});
+
+const formatInstructions = parser.getFormatInstructions();
+
 const init = async () => {
   inquirer
     .prompt([
@@ -30,7 +38,7 @@ const promptFunc = async (input) => {
   try {
     const prompt = new PromptTemplate({
       //template property is where we inject the user input using \n immediately followed by curly braces surrounding a variable name.
-      template: "You are a javascript expert and will answer the user’s coding questions thoroughly as possible.\n{question}",
+      template: "You are a javascript expert and will answer the user’s coding questions thoroughly as possible.\n{format_instructions}\n{question}",
       //   variable name is defined in the next property, inputVariables.
       inputVariables: ["question"],
       partialVariables: { format_instructions: formatInstructions },
@@ -38,19 +46,15 @@ const promptFunc = async (input) => {
     const promptInput = await prompt.format({
       question: input,
     });
-    const res = await model.call(input);
+    const res = await model.call(promptInput);
+
+    // const plainTextOutput = res.replace(/\n/g, "");
+
+    // console.log(res);
     console.log(await parser.parse(res));
   } catch (err) {
     console.error(err);
   }
 };
-
-// With a `StructuredOutputParser` we can define a schema for the output.
-const parser = StructuredOutputParser.fromNamesAndDescriptions({
-  code: "Javascript code that answers the user's question",
-  explanation: "detailed explanation of the example code provided",
-});
-
-const formatInstructions = parser.getFormatInstructions();
 
 init();
