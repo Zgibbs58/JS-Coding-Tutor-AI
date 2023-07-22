@@ -34,4 +34,15 @@ const promptFunc = async (input) => {
   }
 };
 
+const prompt = new PromptTemplates({
+  //template property is where we inject the user input using \n immediately followed by curly braces surrounding a variable name.
+  template: "You are a javascript expert and will answer the user’s coding questions thoroughly as possible.\n{question}",
+  //   variable name is defined in the next property, inputVariables.
+  inputVariables: ["question"],
+});
+
+const promptInput = await prompt.format({
+  question: input,
+});
+
 init();
