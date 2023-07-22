@@ -1,0 +1,17 @@
+{
+  "name": "js-coding-tutor-ai",
+  "version": "1.0.0",
+  "description": "This is an AI powered JS coding tutor CLI application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "inquirer": "^8.2.4",
+    "langchain": "^0.0.114"
+  }
+}
